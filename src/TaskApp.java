@@ -44,9 +44,6 @@ public class TaskApp {
     private void $$$setupUI$$$() {
         panel1 = new JPanel();
         panel1.setLayout(new BorderLayout(0, 0));
-        button1 = new JButton();
-        button1.setText("Button");
-        panel1.add(button1, BorderLayout.CENTER);
     }
 
     /**

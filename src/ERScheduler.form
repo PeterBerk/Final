@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="ERScheduler">
+  <grid id="27dc6" binding="panel1" default-binding="true" layout-manager="BorderLayout" hgap="0" vgap="0">
+    <constraints>
+      <xy x="20" y="20" width="256" height="250"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <grid id="97117" layout-manager="BorderLayout" hgap="0" vgap="0">
+        <constraints border-constraint="North"/>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="c2735" class="javax.swing.JLabel">
+            <constraints border-constraint="West"/>
+            <properties>
+              <text value="Patient Name"/>
+            </properties>
+          </component>
+          <component id="f16f5" class="javax.swing.JTextField" binding="textField1" default-binding="true">
+            <constraints border-constraint="East"/>
+            <properties>
+              <columns value="10"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <grid id="49bfd" layout-manager="BorderLayout" hgap="0" vgap="0">
+        <constraints border-constraint="Center"/>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <grid id="e104b" layout-manager="BorderLayout" hgap="0" vgap="0">
+            <constraints border-constraint="North"/>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="b3c8a" class="javax.swing.JRadioButton" binding="fairConditionRadioButton" default-binding="true">
+                <constraints border-constraint="West"/>
+                <properties>
+                  <text value="Fair Condition"/>
+                </properties>
+              </component>
+              <component id="dd2e6" class="javax.swing.JButton" binding="scheduleButton" default-binding="true">
+                <constraints border-constraint="East"/>
+                <properties>
+                  <text value="Schedule"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+          <grid id="2c6eb" layout-manager="BorderLayout" hgap="0" vgap="0">
+            <constraints border-constraint="South"/>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="aa0d7" class="javax.swing.JRadioButton" binding="criticalConditionRadioButton" default-binding="true">
+                <constraints border-constraint="West"/>
+                <properties>
+                  <text value="Critical Condition"/>
+                </properties>
+              </component>
+              <component id="3ce40" class="javax.swing.JButton" binding="treatAllButton" default-binding="true">
+                <constraints border-constraint="East"/>
+                <properties>
+                  <text value="Treat All"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+          <grid id="1303f" layout-manager="BorderLayout" hgap="0" vgap="0">
+            <constraints border-constraint="Center"/>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="103f8" class="javax.swing.JRadioButton" binding="seriousConditionRadioButton" default-binding="true">
+                <constraints border-constraint="West"/>
+                <properties>
+                  <text value="Serious Condition"/>
+                </properties>
+              </component>
+              <component id="1986" class="javax.swing.JButton" binding="treatNextButton" default-binding="true">
+                <constraints border-constraint="East"/>
+                <properties>
+                  <text value="Treat Next"/>
+                  <verticalAlignment value="0"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+        </children>
+      </grid>
+      <component id="efc1d" class="javax.swing.JTextArea" binding="textArea1" default-binding="true">
+        <constraints border-constraint="South"/>
+        <properties>
+          <editable value="false"/>
+          <enabled value="true"/>
+          <rows value="9"/>
+        </properties>
+      </component>
+    </children>
+  </grid>
+  <buttonGroups>
+    <group name="buttonGroup1">
+      <member id="b3c8a"/>
+      <member id="103f8"/>
+      <member id="aa0d7"/>
+    </group>
+  </buttonGroups>
+</form>
