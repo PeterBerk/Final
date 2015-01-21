@@ -2,7 +2,7 @@
  * Created by peter on 21/01/15.
  */
 public class TaskHandler {
-    Task[] list;
+    Task list[];
     int virtSize;
 
     public TaskHandler(int size){
@@ -10,18 +10,20 @@ public class TaskHandler {
         this.virtSize = 0;
     }
     public void add(Task t, int pos, boolean replace) {
+        System.out.println("position moving forward: " + pos);
         if (replace) {
             reOrder(pos, true);
         }
-        this.list[this.virtSize] = t;
+        this.list[pos] = t;
     }
     public void remove(int pos){
         reOrder(pos, false);
     }
+
     private void reOrder(int pos, boolean add){
         if (add){
             this.virtSize++;
-            for (int x=pos; x < this.virtSize; x++){
+            for (int x=this.virtSize; x >=pos; x--){
                 this.list[x+1] = this.list[x];
             }
         }
@@ -33,6 +35,8 @@ public class TaskHandler {
         }
     }
     public Task getTask(int pos){
+        System.out.println("Requested task at: " + pos);
+        System.out.println("Task is " + this.list[pos].getTitle());
         return this.list[pos];
     }
 

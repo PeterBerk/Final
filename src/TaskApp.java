@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 
+import javax.swing.*;
+
 /**
  *
  * @author peter
@@ -212,7 +214,7 @@ public class TaskApp extends javax.swing.JFrame {
         jmNewBefore.setText("Task After");
         jmNewBefore.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jmNewBeforeActionPerformed(evt);
+                jmNewAfterActionPerformed(evt);
             }
         });
         jMenu3.add(jmNewBefore);
@@ -285,39 +287,97 @@ public class TaskApp extends javax.swing.JFrame {
     }//GEN-LAST:event_jmShowAllActionPerformed
 
     private void jmReplaceCurrentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmReplaceCurrentActionPerformed
-        // TODO add your handling code here:
+        if (verify()) {
+            if (th.getVirtSize() > 0) {
+                Task temp = new Task(jTextField1.getText(), jTextArea1.getText());
+                th.add(temp, this.index-1, false);
+            }
+        }
+        else{
+            JOptionPane.showMessageDialog(this, "Please fill out both fields");
+        }
     }//GEN-LAST:event_jmReplaceCurrentActionPerformed
 
     private void jmDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmDeleteActionPerformed
-        // TODO add your handling code here:
+        if (th.getVirtSize() > 0){
+            th.remove(this.index - 1);
+            if (th.getVirtSize() < this.index){
+                index--;
+            }
+            if (this.index == 0){
+                jTextField1.setText("");
+                jTextArea1.setText("");
+            }
+            else{
+                display(th.getTask(this.index-1));
+            }
+            jtTotal.setText("" + th.getVirtSize());
+            jtCurrent.setText("" + this.index);
+        }
+
     }//GEN-LAST:event_jmDeleteActionPerformed
 
-    private void jmNewBeforeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmNewBeforeActionPerformed
-        // TODO add your handling code here:
+    private void jmNewAfterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmNewBeforeActionPerformed
+        if (verify()) {
+            Task temp = new Task(jTextField1.getText(), jTextArea1.getText());
+            th.add(temp, this.index, true);
+            this.index++;
+
+            jtTotal.setText("" + th.getVirtSize());
+            jtCurrent.setText("" + this.index);
+        }
+        else{
+            JOptionPane.showMessageDialog(this, "Please fill out both fields");
+        }
     }//GEN-LAST:event_jmNewBeforeActionPerformed
 
     private void jmNewPriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmNewPriorActionPerformed
-        // TODO add your handling code here:
+        if (verify()) {
+            Task temp = new Task(jTextField1.getText(), jTextArea1.getText());
+            if (th.getVirtSize() == 0) {
+                JOptionPane.showMessageDialog(this, "Can't add task before if no tasks exist!");
+            } else {
+                th.add(temp, this.index - 1, true);
+            }
+            jtTotal.setText("" + th.getVirtSize());
+            jtCurrent.setText("" + this.index);
+        }
+        else{
+            JOptionPane.showMessageDialog(this, "Please fill out both fields");
+        }
     }//GEN-LAST:event_jmNewPriorActionPerformed
 
     private void btnFirstActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFirstActionPerformed
-        // TODO add your handling code here:
+        if (th.getVirtSize() > 0){
+            System.out.println("Size: " + th.getVirtSize());
+            this.index = 1;
+            display(th.getTask(this.index-1));
+            jtCurrent.setText("" + this.index);
+        }
     }//GEN-LAST:event_btnFirstActionPerformed
 
     private void btnPrevActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrevActionPerformed
-        // TODO add your handling code here:
+        if (this.index > 1){
+            this.index--;
+            display(th.getTask(this.index-1));
+            jtCurrent.setText("" + this.index);
+        }
     }//GEN-LAST:event_btnPrevActionPerformed
 
     private void btnNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextActionPerformed
-        // TODO add your handling code here:
+        if (th.getVirtSize() > 0 && this.index < th.getVirtSize()){
+            this.index++;
+            System.out.println("Index: " + this.index);
+            display(th.getTask(this.index-1));
+            jtCurrent.setText("" + this.index);
+        }
     }//GEN-LAST:event_btnNextActionPerformed
 
     private void btnLastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLastActionPerformed
 
         if (th.getVirtSize() > 0){
-            Task temp = th.getTask(th.getVirtSize()-1);
-            jTextField1.setText(temp.getTitle());
-            jTextArea1.setText(temp.getDesc());
+            this.index = th.getVirtSize();
+            display(th.getTask(this.index-1));
             jtCurrent.setText("" + th.getVirtSize());
         }
     }//GEN-LAST:event_btnLastActionPerformed
@@ -328,11 +388,22 @@ public class TaskApp extends javax.swing.JFrame {
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void btnRestoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRestoreActionPerformed
-        // TODO add your handling code here:
+        if (th.getVirtSize() > 0) {
+            display(th.getTask(this.index - 1));
+        }
     }//GEN-LAST:event_btnRestoreActionPerformed
 
-    private void setLabels(Task t){
-
+    private void display(Task t){
+        jTextField1.setText(t.getTitle());
+        jTextArea1.setText(t.getDesc());
+    }
+    private boolean verify(){
+        if (jTextField1.getText().equals("") || jTextArea1.getText().equals("")){
+            return false;
+        }
+        else{
+            return true;
+        }
     }
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
