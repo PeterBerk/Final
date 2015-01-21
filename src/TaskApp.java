@@ -1,23 +1,21 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 import javax.swing.*;
 
-/**
- *
- * @author peter
- */
 public class TaskApp extends javax.swing.JFrame {
-
+    // Declare the TaskHandler and index integer.
     TaskHandler th;
     int index;
+
     public TaskApp() {
         initComponents();
+        // Support for 100 tasks. Index is 0 or "empty"
         this.th = new TaskHandler(100);
+        // When telling the TaskHandler to add, remove, replace, etc, we always
+        // pass through this.index-1, to counter the fact that the first entry
+        // in a list is always [0]. Essentially, to help differentiate
+        // whether we're accessing the first item or if no items exist.
+        // You will see this throughout the code.
         this.index = 0;
+        // Methods and ActionListeners are below GUI construction code.
     }
 
     @SuppressWarnings("unchecked")
@@ -282,35 +280,66 @@ public class TaskApp extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+
+    // ==================================ACTION PERFORMED METHODS=============================================
+
     private void jmShowAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmShowAllActionPerformed
-        // TODO add your handling code here:
+        // "Show all" action.
+        // Start by making a temporary string
+        String echo = "";
+        // Then go through the entire TaskHandler bank and extract each Task
+        for (int x=0;x<th.getVirtSize();x++){
+            // Temp task to shorten next line of code
+            Task temp = th.getTask(x);
+            // Append information to echo string.
+            echo += "Task #"+(x+1)+"\nTitle: "+temp.getTitle()+"\nDescription: "+temp.getDesc()+"\n#########\n";
+        }
+        // Make a popup with all this info
+        JOptionPane.showMessageDialog(this, echo);
     }//GEN-LAST:event_jmShowAllActionPerformed
 
     private void jmReplaceCurrentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmReplaceCurrentActionPerformed
+        // "Replace current" action.
+        // We have a verify() method that checks the text fields and sees if they're empty or not.
         if (verify()) {
+            // If all is good...
+            // Do we actually have any tasks?
             if (th.getVirtSize() > 0) {
+                // Make a new temp task with the verified info.
                 Task temp = new Task(jTextField1.getText(), jTextArea1.getText());
+                // Append that, "false" because we're not creating a NEW task.
                 th.add(temp, this.index-1, false);
             }
         }
         else{
+            // Display error
             JOptionPane.showMessageDialog(this, "Please fill out both fields");
         }
     }//GEN-LAST:event_jmReplaceCurrentActionPerformed
 
     private void jmDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmDeleteActionPerformed
+        // "Delete current" action
+        // If we actually have a task to delete...
         if (th.getVirtSize() > 0){
+            // Remove it.
             th.remove(this.index - 1);
+            // If we've removed the last item...
             if (th.getVirtSize() < this.index){
+                // Bring out index down by 1 to stay within bounds.
                 index--;
             }
+            // If we've deleted the last task...
             if (this.index == 0){
+                // Clear the fields. It's less confusing.
                 jTextField1.setText("");
                 jTextArea1.setText("");
             }
+            // If not the last task...
             else{
+                // Display new current task
                 display(th.getTask(this.index-1));
             }
+            // Change "Total" and "Current" counters appropriately
             jtTotal.setText("" + th.getVirtSize());
             jtCurrent.setText("" + this.index);
         }
@@ -318,11 +347,16 @@ public class TaskApp extends javax.swing.JFrame {
     }//GEN-LAST:event_jmDeleteActionPerformed
 
     private void jmNewAfterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmNewBeforeActionPerformed
+        // "New Task After" action.
         if (verify()) {
             Task temp = new Task(jTextField1.getText(), jTextArea1.getText());
+            // Add new verified task.
             th.add(temp, this.index, true);
+            // Push our current index up to match the new task.
+            // Helps with flow of program, too. Especially with the
+            // keyboard shortcuts
             this.index++;
-
+            // Update counters.
             jtTotal.setText("" + th.getVirtSize());
             jtCurrent.setText("" + this.index);
         }
@@ -332,15 +366,19 @@ public class TaskApp extends javax.swing.JFrame {
     }//GEN-LAST:event_jmNewBeforeActionPerformed
 
     private void jmNewPriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmNewPriorActionPerformed
+        // "New Task Before" action
         if (verify()) {
             Task temp = new Task(jTextField1.getText(), jTextArea1.getText());
+            // If no tasks exist...
             if (th.getVirtSize() == 0) {
-                JOptionPane.showMessageDialog(this, "Can't add task before if no tasks exist!");
+                // We can't really add a task before nothing.
+                JOptionPane.showMessageDialog(this, "Can't add task before if no tasks exist!\n\n\nUse 'Insert > Task After' instead.");
             } else {
+                // By adding this task behind, it pushes everything else forward.
+                // Therefore, the index remains the same.
                 th.add(temp, this.index - 1, true);
             }
             jtTotal.setText("" + th.getVirtSize());
-            jtCurrent.setText("" + this.index);
         }
         else{
             JOptionPane.showMessageDialog(this, "Please fill out both fields");
@@ -348,8 +386,10 @@ public class TaskApp extends javax.swing.JFrame {
     }//GEN-LAST:event_jmNewPriorActionPerformed
 
     private void btnFirstActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFirstActionPerformed
+        // "First item" button
+        // If there is 1 or more tasks...
         if (th.getVirtSize() > 0){
-            System.out.println("Size: " + th.getVirtSize());
+            // Set index to 1, update fields, update counter.
             this.index = 1;
             display(th.getTask(this.index-1));
             jtCurrent.setText("" + this.index);
@@ -357,7 +397,10 @@ public class TaskApp extends javax.swing.JFrame {
     }//GEN-LAST:event_btnFirstActionPerformed
 
     private void btnPrevActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrevActionPerformed
+        // "Previous" button
+        // If we're not already at the beginning (or empty)...
         if (this.index > 1){
+            // Decrement index, update fields and counter.
             this.index--;
             display(th.getTask(this.index-1));
             jtCurrent.setText("" + this.index);
@@ -365,17 +408,21 @@ public class TaskApp extends javax.swing.JFrame {
     }//GEN-LAST:event_btnPrevActionPerformed
 
     private void btnNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextActionPerformed
+        // "Next" button
+        // If There's at least one task and we're not already at the end...
         if (th.getVirtSize() > 0 && this.index < th.getVirtSize()){
+            // Increment index, update fields and counter.
             this.index++;
-            System.out.println("Index: " + this.index);
             display(th.getTask(this.index-1));
             jtCurrent.setText("" + this.index);
         }
     }//GEN-LAST:event_btnNextActionPerformed
 
     private void btnLastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLastActionPerformed
-
+        // "Last" button
+        // If there's at least one task...
         if (th.getVirtSize() > 0){
+            // Set index to the size, update.
             this.index = th.getVirtSize();
             display(th.getTask(this.index-1));
             jtCurrent.setText("" + th.getVirtSize());
@@ -383,21 +430,32 @@ public class TaskApp extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLastActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+        // "Clear Fields" button
+        // Simply sets fields to nothing.
         jTextField1.setText("");
         jTextArea1.setText("");
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void btnRestoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRestoreActionPerformed
+        // "Restore Fields" button
+        // If we have at least one task...
         if (th.getVirtSize() > 0) {
+            // Update fields with task at index.
             display(th.getTask(this.index - 1));
         }
     }//GEN-LAST:event_btnRestoreActionPerformed
 
     private void display(Task t){
+        // Quick update method to save code.
+        // Takes in a task, and updates Title and Description
+        // fields with what's in the task.
         jTextField1.setText(t.getTitle());
         jTextArea1.setText(t.getDesc());
     }
     private boolean verify(){
+        // Simple field verification
+        // As long as both fields aren't empty, they are good,
+        // and this method returns "true"
         if (jTextField1.getText().equals("") || jTextArea1.getText().equals("")){
             return false;
         }
