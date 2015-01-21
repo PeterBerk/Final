@@ -24,19 +24,31 @@ public class ERScheduler {
         scheduleButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                // ActionPerformed for "Schedule" button
+                // Temporary string for name
                 String name = textField1.getText();
+                // If the name isn't blank...
                 if (!name.equals("")) {
+                    // Assume priority is 0
                     int prio = 0;
+                    // Priority 0 is "critical"
                     String echoCond = "Critical";
+                    // But if "Fair" is selected...
                     if (fairConditionRadioButton.isSelected()) {
+                        // We set them to that instead
                         prio = 2;
                         echoCond = "Fair";
-                    } else if (seriousConditionRadioButton.isSelected()) {
+                    }
+                    // Or if "serious" is selected...
+                    else if (seriousConditionRadioButton.isSelected()) {
                         prio = 1;
                         echoCond = "Serious";
                     }
+                    // Then create a new "Patient" with a name and an integer priority
                     Patient p = new Patient(name, prio);
+                    // Add patient to "QueueHandler"
                     qh.add(p);
+                    // Append new queueing info to pane and clear name field.
                     textArea1.append(name + "\t" + echoCond + "\tWaiting...\n");
                     textField1.setText("");
                 }
@@ -45,10 +57,18 @@ public class ERScheduler {
         treatNextButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                // ActionPerformed for "Treat Next" buttton
+                // If there's 1 or more scheduled patients..
                 if (qh.getVirtSize() > 0) {
+                    // Catch the next patient coming out.
+                    // The QueueHandler determines which one
+                    // it is dependant on their condition and
+                    // time of queueing.
                     Patient temp = qh.remove();
+                    // And display that they've been treated.
                     textArea1.append(temp.getName() + " has been treated.\n");
-                } else {
+                }
+                else {
                     textArea1.append("No one to treat!\n");
                 }
             }
@@ -56,10 +76,15 @@ public class ERScheduler {
         treatAllButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                // ActionPerformed for "Treat All"
+                // While there's at least 1 patient left...
                 while (qh.getVirtSize() > 0) {
+                    // Treat the next appropriate patient
                     Patient temp = qh.remove();
+                    // and tell the user what happened.
                     textArea1.append(temp.getName() + " has been treated.\n");
                 }
+                // Final statement showing loop is done.
                 textArea1.append("Everyone treated.\n");
             }
         });
