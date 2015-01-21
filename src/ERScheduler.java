@@ -16,25 +16,51 @@ public class ERScheduler {
     private JButton scheduleButton;
     private JButton treatNextButton;
     private JButton treatAllButton;
+    private QueueHandler qh;
 
     public ERScheduler() {
-
+        // Support for 100 patients
+        qh = new QueueHandler(100);
         scheduleButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                System.out.println("Button 1!");
+                String name = textField1.getText();
+                if (!name.equals("")) {
+                    int prio = 0;
+                    String echoCond = "Critical";
+                    if (fairConditionRadioButton.isSelected()) {
+                        prio = 2;
+                        echoCond = "Fair";
+                    } else if (seriousConditionRadioButton.isSelected()) {
+                        prio = 1;
+                        echoCond = "Serious";
+                    }
+                    Patient p = new Patient(name, prio);
+                    qh.add(p);
+                    textArea1.append(name + "\t" + echoCond + "\tWaiting...\n");
+                    textField1.setText("");
+                }
             }
         });
         treatNextButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                System.out.println("Bwotton 2!");
+                if (qh.getVirtSize() > 0) {
+                    Patient temp = qh.remove();
+                    textArea1.append(temp.getName() + " has been treated.\n");
+                } else {
+                    textArea1.append("No one to treat!\n");
+                }
             }
         });
         treatAllButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-
+                while (qh.getVirtSize() > 0) {
+                    Patient temp = qh.remove();
+                    textArea1.append(temp.getName() + " has been treated.\n");
+                }
+                textArea1.append("Everyone treated.\n");
             }
         });
     }
@@ -81,6 +107,7 @@ public class ERScheduler {
         panel4.setLayout(new BorderLayout(0, 0));
         panel3.add(panel4, BorderLayout.NORTH);
         fairConditionRadioButton = new JRadioButton();
+        fairConditionRadioButton.setSelected(true);
         fairConditionRadioButton.setText("Fair Condition");
         panel4.add(fairConditionRadioButton, BorderLayout.WEST);
         scheduleButton = new JButton();
@@ -105,11 +132,13 @@ public class ERScheduler {
         treatNextButton.setText("Treat Next");
         treatNextButton.setVerticalAlignment(0);
         panel6.add(treatNextButton, BorderLayout.EAST);
+        final JScrollPane scrollPane1 = new JScrollPane();
+        panel1.add(scrollPane1, BorderLayout.SOUTH);
         textArea1 = new JTextArea();
+        textArea1.setColumns(0);
         textArea1.setEditable(false);
-        textArea1.setEnabled(true);
-        textArea1.setRows(9);
-        panel1.add(textArea1, BorderLayout.SOUTH);
+        textArea1.setRows(10);
+        scrollPane1.setViewportView(textArea1);
         ButtonGroup buttonGroup;
         buttonGroup = new ButtonGroup();
         buttonGroup.add(fairConditionRadioButton);

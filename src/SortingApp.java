@@ -123,7 +123,7 @@ public class SortingApp extends javax.swing.JFrame {
     private void jbBubbleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBubbleActionPerformed
         // Realistically, instead of passing the integer array, everything could
         // just be referenced internally (through this.*) But for expandability's
-        // sake, we'll just pass through our "Numbers" array.
+        // sake, we'll just pass through our "Numbers" array instead.
         bubbleSort(this.Numbers);
         updateNumbers(this.Numbers);
     }//GEN-LAST:event_jbBubbleActionPerformed
