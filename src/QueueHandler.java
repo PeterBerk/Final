@@ -14,7 +14,6 @@ public class QueueHandler {
 
     }
     public void add(Patient p) {
-        int size = this.list.length;
         if (p.getPriority() < this.highestPrio) this.highestPrio = p.getPriority();
         this.list[this.virtSize] = p;
         this.virtSize++;
@@ -32,9 +31,11 @@ public class QueueHandler {
         checkPrio();
         return temp;
     }
+
     public int getVirtSize(){
         return this.virtSize;
     }
+
     private void reOrder(int pos){
         this.virtSize--;
         for (int x=pos;x<this.virtSize;x++){
